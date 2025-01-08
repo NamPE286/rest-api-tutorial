@@ -31,8 +31,8 @@ export class ProductModel {
 
     static async addProduct(body: any): Promise<void> {
         if (
-            typeof body.name === "undefined" ||
-            typeof body.price === "undefined"
+            typeof body.name !== "string" ||
+            typeof body.price !== "number"
         ) {
             throw new Error("Invalid type");
         }
