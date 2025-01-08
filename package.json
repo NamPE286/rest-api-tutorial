@@ -13,6 +13,8 @@
     "express": "^4.21.2"
   },
   "scripts": {
-    "dev": "bun --watch src/index.ts"
+    "dev": "bun --watch src/index.ts",
+    "dbcommit": "supabase db diff -s public -f local",
+    "dbdump": "supabase db dump --local --data-only --schema public > ./supabase/seed.sql"
   }
 }
