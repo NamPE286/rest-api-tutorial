@@ -1,34 +1,29 @@
 import { Router } from "express";
+import { ProductModel } from "../models/product";
 
 const router = Router();
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     const { id } = req.params;
 
-    res.send({
-        id: parseInt(id),
-        name: `Product no ${id}`,
-        price: 5000,
-    });
+    res.send(await ProductModel.getProductByID(parseInt(id)));
 });
 
-router.get("/:id/reviews", (req, res) => {
-    res.send([
-        {
-            author: "tachi",
-            content: "hay day",
-        },
-    ]);
+router.get("/:id/reviews", async (req, res) => {
+    const { id } = req.params;
+
+    res.send(await ProductModel.getProductReviews(parseInt(id)));
 });
 
-router.post("/", (req, res) => {
-    if (JSON.stringify(req.body) === "{}") {
-        res.status(400).send({
-            error: "Body must not be empty",
-        });
+router.post("/", async (req, res) => {
+    try {
+        await ProductModel.addProduct(req.body);
+        res.status(200).send();
+    } catch (err) {
+        if (err instanceof Error) {
+            res.status(400).send({ message: err.message });
+        }
     }
-
-    res.status(200).send();
 });
 
 export default router;
