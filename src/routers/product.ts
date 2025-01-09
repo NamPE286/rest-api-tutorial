@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ProductModel } from "@src/models/product";
+import userAuth from "@src/middlewares/userAuth";
 
 const router = Router();
 
@@ -15,7 +16,10 @@ router.get("/:id/reviews", async (req, res) => {
     res.send(await ProductModel.getProductReviews(parseInt(id)));
 });
 
+router.use(userAuth);
+
 router.post("/", async (req, res) => {
+    console.log(res.locals.user)
     try {
         await ProductModel.addProduct(req.body);
         res.status(200).send();
